@@ -1,18 +1,18 @@
 {
-  "version": "v2.0.0-kit.1",
+  "version": "v2.0.0-kit.2",
   "sdkVersion": "2.0.0",
   "language": "java",
   "portable": false,
   "engine": {
-    "file": "clunkyard-engine-v2.0.0-kit.1.tar.gz",
-    "url": "https://github.com/clunkyard/game-kit/releases/download/v2.0.0-kit.1/clunkyard-engine-v2.0.0-kit.1.tar.gz",
+    "file": "clunkyard-engine-v2.0.0-kit.2.tar.gz",
+    "url": "https://github.com/clunkyard/game-kit/releases/download/v2.0.0-kit.2/clunkyard-engine-v2.0.0-kit.2.tar.gz",
     "bytes": 7071301,
     "sha256": "0b9cfa6958a952c32388602821ec4275e61400255f91b212f9c2a9220f8a0d86",
     "expandedBytes": 33794538
   },
   "sdk": {
-    "file": "clunkyard-sdk-java-linux-x64-v2.0.0-kit.1.tar.gz",
-    "url": "https://github.com/clunkyard/game-kit/releases/download/v2.0.0-kit.1/clunkyard-sdk-java-linux-x64-v2.0.0-kit.1.tar.gz",
+    "file": "clunkyard-sdk-java-linux-x64-v2.0.0-kit.2.tar.gz",
+    "url": "https://github.com/clunkyard/game-kit/releases/download/v2.0.0-kit.2/clunkyard-sdk-java-linux-x64-v2.0.0-kit.2.tar.gz",
     "bytes": 752891,
     "sha256": "28fdaba9dd1fa86f56dc04562145bef498bb27bb80fb0b5d68965d036076dc24",
     "expandedBytes": 3883592
@@ -25,5 +25,19 @@
     "make",
     "javac",
     "java"
-  ]
+  ],
+  "requirements": {
+    "checks": [
+      {
+        "label": "JDK 22+",
+        "command": "javac",
+        "args": [
+          "-version"
+        ],
+        "hint": "Install a JDK 22 or later, rather than a JRE.",
+        "versionPattern": "javac\\s+(\\d+)",
+        "minimum": 22
+      }
+    ]
+  }
 }
