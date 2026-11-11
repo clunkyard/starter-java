@@ -1,7 +1,7 @@
 # A Clunkyard robot in java
 
-Edit `Bot.java`, build, play a real local match and inspect its replay. Install Node 20+ with npm and your existing language tools: `javac`, `java`.
-Native SDK assets require Linux x86-64 and glibc 2.39+ (Ubuntu 24.04+ or WSL2 Ubuntu 24.04+).
+Edit `Bot.java`, build, play a real local match and inspect its replay. Install [Node 20+ with npm](https://nodejs.org/en/download) and your language's normal compiler or interpreter.
+Check the [supported operating systems and toolchain installers](https://clunkyard.com/sdk/player-kit#supported-platforms) for this language. Hosted builds and trials are available when its local toolchain or SDK is unavailable on your computer.
 
 ```sh
 git clone https://github.com/clunkyard/starter-java.git
@@ -27,7 +27,7 @@ npx --yes @clunkyard/cli@2 match 77 3d zero-g
 
 Keep a baseline commit. Repeat several seeds and rulesets; compare contacts, battery, aim, shots, hits and eliminations in the replay. Local trials run programs as your user. Use hosted trials to measure arena budgets before a tournament.
 
-The CLI packages SDK 2.0.0/protocol 2 asset identities from the immutable [v2.0.0-kit.2 release](https://github.com/clunkyard/game-kit/releases/tag/v2.0.0-kit.2). `@2` receives compatible tooling fixes without copying scripts into your robot repository. To reproduce an exact tool version, use `npx --yes @clunkyard/cli@2.0.0` or set `CLUNKYARD='npx --yes @clunkyard/cli@2.0.0'` with Make. SDK/engine caches are identified by their content hashes and remain reusable across CLI updates.
+The CLI packages SDK 2.0.0/protocol 2 asset identities from the immutable [v2.0.0-kit.3 release](https://github.com/clunkyard/game-kit/releases/tag/v2.0.0-kit.3). `@2` receives compatible tooling fixes without copying scripts into your robot repository. To reproduce an exact tool version, use `npx --yes @clunkyard/cli@2.1.0` or set `CLUNKYARD='npx --yes @clunkyard/cli@2.1.0'` with Make. SDK/engine caches are identified by their content hashes and remain reusable across CLI updates.
 
 ## Play online
 
