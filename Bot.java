@@ -133,28 +133,10 @@ public final class Bot extends Robot {
             angles().clamp((climb - me.pitch()) / 30));
       }
     });
-    calibrate();
   }
 
   public static void main(String[] args) {
     Clunkyard.run(new Bot());
   }
 
-  // ---- The arena's rate calibration: safe to delete, with the line above ----
-  // Only the calibration sends calibration.work; it times this language on
-  // the same work as every other. The kernel is xorshift-sqrt v1: work rounds
-  // of a 64-bit xorshift and a square-root sum, reported as WORK.
-  private void calibrate() {
-    long work = (long) raw().number("state.calibration.work").orElse(0);
-    if (work < 1) return;
-    long x = 88172645463325252L ^ clock().tick();
-    double sum = 0;
-    for (long i = 0; i < work; i++) {
-      x ^= x << 13;
-      x ^= x >>> 7;
-      x ^= x << 17;
-      sum += Math.sqrt(x >>> 11);
-    }
-    status().set("WORK", ((long) Math.floor(sum) + (x >>> 40)) % 1000000);
-  }
 }
