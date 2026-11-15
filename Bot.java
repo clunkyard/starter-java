@@ -20,7 +20,8 @@
 // clock: tick seconds remaining_ticks
 // arena: size gravity terrain_kind ground_height(x y)
 // me: health position velocity heading pitch roll angular_velocity
-//   attitude grounded altitude applied
+//   attitude grounded altitude applied hull_mounts to_mount(heading pitch)
+//   from_mount(heading pitch) mount_toward(point)
 // battery: charge capacity regen sustainable_drive compute
 //   drive_cost(fraction)
 // drive: hover_lift
@@ -42,7 +43,8 @@
 // score: me best armour
 // angles: normalize(degrees) angle_diff(target current)
 //   bearing_to(from to) elevation_to(from to) direction(heading pitch)
-//   distance(a b) clamp(value low high)
+//   distance(a b) to_chassis(heading pitch attitude)
+//   from_chassis(heading pitch attitude) clamp(value low high)
 // raw: number(path) text(path) has(path) flag(path) count(path) line()
 // Controls: drive.set(throttle turn pitch_turn)
 //   drive.forces(thrust strafe lift yaw_torque pitch_torque roll_torque brake)
@@ -61,6 +63,7 @@ public final class Bot extends Robot {
   private static final double SEARCH_TURN = 0.33;
 
   private boolean free; // flying free, robots may be above or below
+  private int dodges, dodgeEnd; // dodges taken, and the tick the current one ends
 
   /** A turn or pitch-turn control towards an angle, full at 45 degrees off. */
   private double steer(double towards, double current) {
@@ -87,6 +90,7 @@ public final class Bot extends Robot {
       // The heaviest shot that still covers the range in about a second,
       // aimed where the target will be, lobbed under gravity.
       double power = gun().powerForFlightTime(target.range(), 1);
+      // gun().lead is the intercept if the target holds course.
       var aim = gun().lead(target, power);
       double heading = aim.map(Solution::heading).orElse(target.bearing());
       double pitch = aim.map(Solution::pitch).orElse(target.elevation());
@@ -114,6 +118,21 @@ public final class Bot extends Robot {
       double pitch = free ? ((clock().tick() / 10) % 3 - 1) * 35 : 0;
       scanner().set(angles().normalize(scanner().last().heading() + 36), 40, pitch);
       status().set("SEARCH");
+    }
+    // A simple dodge: vary it, or predict the shooter.
+    int tick = clock().tick();
+    if (tick >= dodgeEnd && sensors().cues().stream().anyMatch(c -> c.source() == Source.MUZZLE)) {
+      dodges++;
+      dodgeEnd = tick + 10;
+    }
+    if (tick < dodgeEnd) {
+      // Off the line of fire: left, then right next time (turn is positive left, strafe positive right).
+      boolean left = dodges % 2 == 1;
+      if (match().control() == Control.FORCES) {
+        drive().set(Drive.throttle(0.5));
+        drive().forces(Drive.strafe(left ? -1 : 1));
+      } else drive().set(1, left ? 1 : -1);
+      status().set(left ? "dodge:left" : "dodge:right", dodges);
     }
     // Low battery: drive gently so the shots can still be paid for.
     if (battery().charge() < battery().capacity() / 4)
